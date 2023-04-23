@@ -1,5 +1,6 @@
 import os
 import time
+import ctypes
 
 try: from PIL import Image
 except: os.system("pip install Pillow")
@@ -50,9 +51,10 @@ def screenshot():
         
         # take CreateCompatibleDC
         image = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmpstr, 'raw', 'BGRX', 0, 1)
-        
+
         return image, x, y
     except:
+        time.sleep(1)
         print('Error (def screenshot)')
         screenshot()
 
@@ -78,8 +80,19 @@ def main():
 
                 # click to accept button
                 pyautogui.click(x, y)
+
+                # return to program you were in
+                user32 = ctypes.windll.user32
+                user32.keybd_event(0x12, 0, 0, 0) # hold alt
+                time.sleep(0.1)
+                user32.keybd_event(0x09, 0, 0, 0) # hold tab
+                time.sleep(0.2)
+                user32.keybd_event(0x09, 0, 2, 0) # release tab
+                time.sleep(0.1)
+                user32.keybd_event(0x12, 0, 2, 0) # release alt
             time.sleep(1)
         except:
+            time.sleep(1)
             print('Error (def main)')
 
 if __name__ == '__main__':
