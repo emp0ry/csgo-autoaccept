@@ -5,6 +5,3 @@ This is not a cheat, this just utilises the -netconport launch option which allo
 ## setup for main.py
 - add the launch option `-netconport 2121` to csgo
 - working in fullscreen mode :)
-
-## Bugs
-- doesn't work when you're in csgo only if csgo is minimized
