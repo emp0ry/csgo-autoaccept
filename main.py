@@ -69,15 +69,6 @@ def main():
                 ctypes.windll.user32.ShowWindow(hwnd, 3)
                 ctypes.windll.user32.SetForegroundWindow(hwnd)
 
-                # get resolution of csgo
-                left, top, right, bottom = get_window_rect(hwnd)
-                width = right - left
-                height = bottom - top
-                print(f'Game resolution: {width}x{height}')
-
-                x = int(width / 2)
-                y = int(height / 2.4)
-
                 time.sleep(1)
                 timer = time.time()
                 while not in_csgo():
@@ -97,6 +88,15 @@ def main():
                         ctypes.windll.user32.mouse_event(0x0004, 0, 0, 0, 0)
 
                         main()
+
+                # get resolution of csgo
+                left, top, right, bottom = get_window_rect(hwnd)
+                width = right - left
+                height = bottom - top
+                print(f'Game resolution: {width}x{height}')
+
+                x = int(width / 2)
+                y = int(height / 2.4)
 
                 # click to accept button
                 ctypes.windll.user32.SetCursorPos(ctypes.c_long(x), ctypes.c_long(y))
