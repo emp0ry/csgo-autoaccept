@@ -9,4 +9,3 @@ This is not a cheat, this just utilises the -netconport launch option which allo
 
 ## setup for main.py
 - add the launch option `-netconport 2121` to csgo
-
