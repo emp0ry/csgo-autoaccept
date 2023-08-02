@@ -60,7 +60,8 @@ def main():
     while True:
         try:
             data = tn.read_until(b"\n").decode("utf-8")
-            if 'SDR server steamid:' in data and 'vport' in data and '] connected' in data:
+
+            if 'Started tracking Steam Net Connection to =[' in data and 'handle' in data:
                 print('Match detected!')
 
                 state = in_csgo()
@@ -70,23 +71,14 @@ def main():
                 ctypes.windll.user32.SetForegroundWindow(hwnd)
 
                 time.sleep(1)
+
                 timer = time.time()
                 while not in_csgo():
-                    time.sleep(0.1)
+                    ctypes.windll.user32.ShowWindow(hwnd, 3)
+                    ctypes.windll.user32.SetForegroundWindow(hwnd)
+
+                    time.sleep(2)
                     if time.time() - timer > 10:
-                        tn = telnetlib.Telnet('127.0.0.1', 2121)
-                        hwnd = ctypes.windll.user32.FindWindowW(None, csgo_windows_name)
-
-                        ctypes.windll.user32.ShowWindow(hwnd, 3)
-                        ctypes.windll.user32.SetForegroundWindow(hwnd)
-
-                        time.sleep(2)
-
-                        # click to accept button
-                        ctypes.windll.user32.SetCursorPos(ctypes.c_long(x), ctypes.c_long(y))
-                        ctypes.windll.user32.mouse_event(0x0002, 0, 0, 0, 0)
-                        ctypes.windll.user32.mouse_event(0x0004, 0, 0, 0, 0)
-
                         main()
 
                 # get resolution of csgo
@@ -132,4 +124,8 @@ if __name__ == '__main__':
 █▄█ ░█░   ██▄ █░▀░█ █▀▀ █▄█ █▀▄ ░█░
 https://github.com/emp0ry/''')
 
-    main()
+    try:
+        main()
+    except:
+        print('AutoAccept Crashed!!\nRestarting...')
+        time.sleep(2)
