@@ -51,66 +51,61 @@ def get_window_rect(hwnd):
     return rect.left, rect.top, rect.right, rect.bottom
 
 def main():
-    # handle of csgo
-    hwnd = ctypes.windll.user32.FindWindowW(None, csgo_windows_name)
+    try:
+        # handle of csgo
+        hwnd = ctypes.windll.user32.FindWindowW(None, csgo_windows_name)
 
-    # initialization of telnet
-    tn = telnetlib.Telnet('127.0.0.1', 2121)
+        # initialization of telnet
+        tn = telnetlib.Telnet('127.0.0.1', 2121)
 
-    while True:
-        try:
-            data = tn.read_until(b"\n").decode("utf-8")
+        while True:
+            try:
+                data = tn.read_until(b"\n").decode("utf-8")
 
-            if 'Started tracking Steam Net Connection to =[' in data and 'handle' in data:
-                print('Match detected!')
+                if 'SDR server steamid:' in data and 'vport' in data and '] connected' in data:
+                    print('Match detected!')
 
-                state = in_csgo()
+                    state = in_csgo()
 
-                # opening csgo
-                ctypes.windll.user32.ShowWindow(hwnd, 3)
-                ctypes.windll.user32.SetForegroundWindow(hwnd)
-
-                time.sleep(1)
-
-                timer = time.time()
-                while not in_csgo():
+                    # opening csgo
                     ctypes.windll.user32.ShowWindow(hwnd, 3)
                     ctypes.windll.user32.SetForegroundWindow(hwnd)
 
-                    time.sleep(2)
-                    if time.time() - timer > 10:
-                        main()
+                    time.sleep(1)
 
-                # get resolution of csgo
-                left, top, right, bottom = get_window_rect(hwnd)
-                width = right - left
-                height = bottom - top
-                print(f'Game resolution: {width}x{height}')
+                    # get resolution of csgo
+                    left, top, right, bottom = get_window_rect(hwnd)
+                    width = right - left
+                    height = bottom - top
+                    print(f'Game resolution: {width}x{height}')
 
-                x = int(width / 2)
-                y = int(height / 2.4)
+                    x = int(width / 2)
+                    y = int(height / 2.4)
 
-                # click to accept button
-                ctypes.windll.user32.SetCursorPos(ctypes.c_long(x), ctypes.c_long(y))
-                ctypes.windll.user32.mouse_event(0x0002, 0, 0, 0, 0)
-                ctypes.windll.user32.mouse_event(0x0004, 0, 0, 0, 0)
+                    # click to accept button
+                    ctypes.windll.user32.SetCursorPos(ctypes.c_long(x), ctypes.c_long(y))
+                    ctypes.windll.user32.mouse_event(0x0002, 0, 0, 0, 0)
+                    ctypes.windll.user32.mouse_event(0x0004, 0, 0, 0, 0)
 
-                if not state:
-                    # return to program you were in
-                    ctypes.windll.user32.keybd_event(0x12, 0, 0, 0) # hold alt
-                    time.sleep(0.1)
-                    ctypes.windll.user32.keybd_event(0x09, 0, 0, 0) # hold tab
-                    time.sleep(0.2)
-                    ctypes.windll.user32.keybd_event(0x09, 0, 2, 0) # release tab
-                    time.sleep(0.1)
-                    ctypes.windll.user32.keybd_event(0x12, 0, 2, 0) # release alt
-        except:
-            print("failed to connect to csgo (game not open? -netconport 2121 not set?)")
-            try:
-                tn = telnetlib.Telnet('127.0.0.1', 2121)
-                hwnd = ctypes.windll.user32.FindWindowW(None, csgo_windows_name)
+                    if not state:
+                        # return to program you were in
+                        ctypes.windll.user32.keybd_event(0x12, 0, 0, 0) # hold alt
+                        time.sleep(0.1)
+                        ctypes.windll.user32.keybd_event(0x09, 0, 0, 0) # hold tab
+                        time.sleep(0.2)
+                        ctypes.windll.user32.keybd_event(0x09, 0, 2, 0) # release tab
+                        time.sleep(0.1)
+                        ctypes.windll.user32.keybd_event(0x12, 0, 2, 0) # release alt
             except:
-                time.sleep(1)
+                print("failed to connect to csgo (game not open? -netconport 2121 not set?)")
+                try:
+                    tn = telnetlib.Telnet('127.0.0.1', 2121)
+                    hwnd = ctypes.windll.user32.FindWindowW(None, csgo_windows_name)
+                except:
+                    time.sleep(1)
+    except:
+        print("failed to connect to csgo (game not open? -netconport 2121 not set?)")
+        time.sleep(2)
 
 if __name__ == '__main__':
     ctypes.windll.msvcrt.system(ctypes.c_char_p('cls'.encode())) # clear console
@@ -124,8 +119,4 @@ if __name__ == '__main__':
 █▄█ ░█░   ██▄ █░▀░█ █▀▀ █▄█ █▀▄ ░█░
 https://github.com/emp0ry/''')
 
-    try:
-        main()
-    except:
-        print('AutoAccept Crashed!!\nRestarting...')
-        time.sleep(2)
+    main()
