@@ -11,4 +11,4 @@ This is not a cheat, this just utilises the -netconport launch option which allo
 - add the launch option `-netconport 2121` to csgo
 
 ## Bugs
-- sometimes rarely it doesn't work :)
+- sometimes rarely it doesn't work, for reasons unknown to us :)
