@@ -3,7 +3,7 @@ import ctypes
 import telnetlib
 from ctypes import wintypes
 
-csgo_windows_name = 'Counter-Strike: Global Offensive - Direct3D 9'
+csgo_class_name = b'Valve001'
 
 def in_csgo():
     try:
@@ -53,7 +53,7 @@ def get_window_rect(hwnd):
 def main():
     try:
         # handle of csgo
-        hwnd = ctypes.windll.user32.FindWindowW(None, csgo_windows_name)
+        hwnd = ctypes.windll.user32.FindWindowA(csgo_class_name, None)
 
         # initialization of telnet
         tn = telnetlib.Telnet('127.0.0.1', 2121)
@@ -100,7 +100,7 @@ def main():
                 print("failed to connect to csgo (game not open? -netconport 2121 not set?)")
                 try:
                     tn = telnetlib.Telnet('127.0.0.1', 2121)
-                    hwnd = ctypes.windll.user32.FindWindowW(None, csgo_windows_name)
+                    hwnd = ctypes.windll.user32.FindWindowA(csgo_class_name, None)
                 except:
                     time.sleep(1)
     except:
